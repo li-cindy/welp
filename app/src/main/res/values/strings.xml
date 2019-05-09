@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Welp</string>
+    <string name="title_activity_display_reviews">DisplayReviewsActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_create_review">Create Review</string>
+    <string name="title_my_map">My Map</string>
+</resources>

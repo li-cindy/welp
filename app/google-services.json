@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "148332907003",
+    "firebase_url": "https://welp-1d3ce.firebaseio.com",
+    "project_id": "welp-1d3ce",
+    "storage_bucket": "welp-1d3ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148332907003:android:be28196841097b3b",
+        "android_client_info": {
+          "package_name": "hu.ait.welp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148332907003-vkms8bvnggglr6vqrnd1duub6te4ghho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hu.ait.welp",
+            "certificate_hash": "f9e7937fb9df313e608bd4714670faf9e19a9f20"
+          }
+        },
+        {
+          "client_id": "148332907003-p5el7j34v9jq9cqbeq2mrt28lsb0slok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8i261maBoMH2wb-49NIJX0OpxXfRFPLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148332907003-p5el7j34v9jq9cqbeq2mrt28lsb0slok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
