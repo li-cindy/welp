@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import hu.ait.welp.R
 import hu.ait.welp.data.Review
@@ -34,33 +32,32 @@ class ReviewsAdapter(
     override fun getItemCount() =  reviewsList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (name, description, imgUrl, location, rating) =
+        val (authorId, author, name, description, imgUrl, location, rating) =
             reviewsList[holder.adapterPosition]
 
-        holder.tvName.text = name
+        holder.tvName.text = uId
         holder.tvDescription.text = description
 //        holder.tvLocation.text = location
-        holder.tvRating.text = String.format("%s/10", rating.toString())
+        holder.rbRating.numStars = rating
 
 
 //        TODO: delete review
-//        if (uId == authorId) {
-//            holder.btnDeletePost.visibility = View.VISIBLE
-//
-//            holder.btnDeletePost.setOnClickListener {
-//                removePost(holder.adapterPosition)
-//            }
-//        } else {
-//            holder.btnDeletePost.visibility = View.GONE
-//        }
+        if (uId == authorId) {
+            holder.ivDelete.visibility = View.VISIBLE
 
-//        TODO: add image
-//        if (imgUrl.isNotEmpty()) {
-//            holder.ivPhoto.visibility = View.VISIBLE
-//            Glide.with(context).load(imgUrl).into(holder.ivPhoto)
-//        } else {
-//            holder.ivPhoto.visibility = View.GONE
-//        }
+            holder.ivDelete.setOnClickListener {
+                removeReview(holder.adapterPosition)
+            }
+        } else {
+            holder.ivDelete.visibility = View.GONE
+        }
+
+        if (imgUrl.isNotEmpty()) {
+            holder.ivPhoto.visibility = View.VISIBLE
+            Glide.with(context).load(imgUrl).into(holder.ivPhoto)
+        } else {
+            holder.ivPhoto.visibility = View.GONE
+        }
 
 
         setAnimation(holder.itemView, position)
@@ -103,7 +100,10 @@ class ReviewsAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.tvName
         val tvDescription: TextView = itemView.tvDescription
-        val tvRating: TextView = itemView.tvRating
+        val rbRating: RatingBar = itemView.rbRating
+        val ivPhoto: ImageView = itemView.ivPhoto
+        val ivEdit: ImageView = itemView.ivEdit
+        val ivDelete: ImageView = itemView.ivDelete
 
     }
 }

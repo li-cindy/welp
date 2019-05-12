@@ -37,16 +37,30 @@
                 android:id="@+id/etRating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:hint="Rating (out of 10)"/>
+                android:inputType="number"
+                android:hint="Rating (out of 5)"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button
-            android:id="@+id/btnSend"
+            android:id="@+id/btnAttach"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Attach Photo"/>
+
+    <ImageView
+            android:id="@+id/imgAttach"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
+            android:visibility="gone"/>
+    <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:onClick="sendClick"
-            android:text="Send"/>
+            android:text="Send"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@android:color/holo_green_light"/>
 
 
 </LinearLayout>

@@ -37,21 +37,19 @@ class CreateReviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_review)
 
-//        TODO: add image
-//        btnAttach.setOnClickListener {
-//            val intentStartCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//            startActivityForResult(intentStartCamera, CAMERA_REQUEST_CODE)
-//        }
+        btnAttach.setOnClickListener {
+            val intentStartCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intentStartCamera, CAMERA_REQUEST_CODE)
+        }
 
         requestNeededPermission()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-//            TODO: add image
-//            uploadBitmap = data!!.extras.get("data") as Bitmap
-//            imgAttach.setImageBitmap(uploadBitmap)
-//            imgAttach.visibility = View.VISIBLE
+            uploadBitmap = data!!.extras.get("data") as Bitmap
+            imgAttach.setImageBitmap(uploadBitmap)
+            imgAttach.visibility = View.VISIBLE
         }
     }
 
@@ -96,22 +94,40 @@ class CreateReviewActivity : AppCompatActivity() {
     }
 
     fun sendClick(v: View) {
-//        TODO: add image
-//        if (imgAttach.visibility == View.GONE) {
-//            uploadPost()
-//        } else {
-//            uploadPostWithImage()
-//        }
-        uploadPost()
+        if (etName.text.isNotEmpty() || etDescription.text.isNotEmpty() || etRating.text.isNotEmpty()) {
+            if (etRating.text.toString().toInt() < 0 || etRating.text.toString().toInt() > 5) {
+                etRating.error = "Rating must be between 0-5!"
+            } else {
+                if (imgAttach.visibility == View.GONE) {
+                    uploadPost()
+                } else {
+                    uploadPostWithImage()
+                }
+            }
+
+        } else {
+            if (etName.text.isEmpty()) {
+                etName.error = "This field cannot be empty!"
+            }
+            if (etDescription.text.isEmpty()) {
+                etDescription.error = "This field cannot be empty!"
+            }
+            if (etRating.text.isEmpty()) {
+                etRating.error = "This field cannot be empty!"
+            }
+        }
+
     }
 
     fun uploadPost(imageUrl: String = "") {
         val review = Review(
+            FirebaseAuth.getInstance().currentUser!!.uid,
+            FirebaseAuth.getInstance().currentUser!!.displayName!!,
             etName.text.toString(),
             etDescription.text.toString(),
+            imageUrl,
             "",
-            "",
-            etRating.text.toString().toFloat()
+            etRating.text.toString().toInt()
         )
 
         var reviewsCollection = FirebaseFirestore.getInstance().collection(
