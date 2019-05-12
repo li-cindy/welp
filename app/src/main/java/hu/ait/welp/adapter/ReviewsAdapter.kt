@@ -35,7 +35,7 @@ class ReviewsAdapter(
         val (authorId, author, name, description, imgUrl, location, rating) =
             reviewsList[holder.adapterPosition]
 
-        holder.tvName.text = uId
+        holder.tvName.text = name
         holder.tvDescription.text = description
 //        holder.tvLocation.text = location
         holder.rbRating.numStars = rating
