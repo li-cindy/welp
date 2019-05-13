@@ -1,6 +1,7 @@
 package hu.ait.welp.adapter
 
 import android.content.Context
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +10,15 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import hu.ait.welp.DisplayReviewsActivity
 import hu.ait.welp.R
 import hu.ait.welp.data.Review
 import kotlinx.android.synthetic.main.review_row.view.*
 
 class ReviewsAdapter(
     private val context: Context,
-    private val uId: String) : RecyclerView.Adapter<ReviewsAdapter.ViewHolder>() {
+    private val uId: String
+) : RecyclerView.Adapter<ReviewsAdapter.ViewHolder>() {
 
     private var reviewsList = mutableListOf<Review>()
     private var reviewKeys = mutableListOf<String>()
@@ -29,7 +32,7 @@ class ReviewsAdapter(
         return ViewHolder(view)
     }
 
-    override fun getItemCount() =  reviewsList.size
+    override fun getItemCount() = reviewsList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val (authorId, author, name, description, imgUrl, location, rating) =
@@ -37,8 +40,8 @@ class ReviewsAdapter(
 
         holder.tvName.text = name
         holder.tvDescription.text = description
-//        holder.tvLocation.text = location
-        holder.rbRating.numStars = rating
+        holder.tvLocation.text = location.toString()
+        holder.rbRating.rating = rating
 
 
 //        TODO: delete review
@@ -46,7 +49,20 @@ class ReviewsAdapter(
             holder.ivDelete.visibility = View.VISIBLE
 
             holder.ivDelete.setOnClickListener {
-                removeReview(holder.adapterPosition)
+                val alert = AlertDialog.Builder(
+                    holder.itemView.context
+                )
+                alert.setTitle("Delete Review")
+                alert.setMessage("Are you sure you want to delete this review?")
+                alert.setPositiveButton("Yes") { dialog, witch ->
+
+                    removeReview(holder.adapterPosition)
+
+                }
+                alert.setNegativeButton("Cancel") { dialog, witch ->
+                }
+                alert.show()
+
             }
         } else {
             holder.ivDelete.visibility = View.GONE
@@ -58,7 +74,6 @@ class ReviewsAdapter(
         } else {
             holder.ivPhoto.visibility = View.GONE
         }
-
 
         setAnimation(holder.itemView, position)
     }
@@ -90,8 +105,10 @@ class ReviewsAdapter(
 
     private fun setAnimation(viewToAnimate: View, position: Int) {
         if (position > lastPosition) {
-            val animation = AnimationUtils.loadAnimation(context,
-                android.R.anim.slide_in_left)
+            val animation = AnimationUtils.loadAnimation(
+                context,
+                android.R.anim.slide_in_left
+            )
             viewToAnimate.startAnimation(animation)
             lastPosition = position
         }
@@ -99,6 +116,7 @@ class ReviewsAdapter(
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.tvName
+        val tvLocation: TextView = itemView.tvLocation
         val tvDescription: TextView = itemView.tvDescription
         val rbRating: RatingBar = itemView.rbRating
         val ivPhoto: ImageView = itemView.ivPhoto

@@ -94,15 +94,11 @@ class CreateReviewActivity : AppCompatActivity() {
     }
 
     fun sendClick(v: View) {
-        if (etName.text.isNotEmpty() || etDescription.text.isNotEmpty() || etRating.text.isNotEmpty()) {
-            if (etRating.text.toString().toInt() < 0 || etRating.text.toString().toInt() > 5) {
-                etRating.error = "Rating must be between 0-5!"
+        if (etName.text.isNotEmpty() || etDescription.text.isNotEmpty()) {
+            if (imgAttach.visibility == View.GONE) {
+                uploadPost()
             } else {
-                if (imgAttach.visibility == View.GONE) {
-                    uploadPost()
-                } else {
-                    uploadPostWithImage()
-                }
+                uploadPostWithImage()
             }
 
         } else {
@@ -111,9 +107,6 @@ class CreateReviewActivity : AppCompatActivity() {
             }
             if (etDescription.text.isEmpty()) {
                 etDescription.error = "This field cannot be empty!"
-            }
-            if (etRating.text.isEmpty()) {
-                etRating.error = "This field cannot be empty!"
             }
         }
 
@@ -126,8 +119,8 @@ class CreateReviewActivity : AppCompatActivity() {
             etName.text.toString(),
             etDescription.text.toString(),
             imageUrl,
-            "",
-            etRating.text.toString().toInt()
+            etLocation.text.toString(),
+            rbEditRating.rating
         )
 
         var reviewsCollection = FirebaseFirestore.getInstance().collection(

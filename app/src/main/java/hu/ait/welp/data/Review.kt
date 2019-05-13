@@ -1,7 +1,5 @@
 package hu.ait.welp.data
 
-import com.google.type.LatLng
-
 data class Review(
     var uid: String = "",
     var author: String = "",
@@ -9,5 +7,5 @@ data class Review(
     var description: String = "",
     var imgUrl: String = "",
     var location: String = "", // TODO: should be LatLng
-    var rating: Int = 0
+    var rating: Float = 0.toFloat()
 )
