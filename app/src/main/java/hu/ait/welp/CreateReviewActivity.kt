@@ -59,7 +59,7 @@ class CreateReviewActivity : AppCompatActivity(),
         requestNeededPermission()
         startLocation()
 
-        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment = supportFragmentManager.findFragmentById(R.id.createReviewMap) as SupportMapFragment
         mapFragment.getMapAsync(this);
 
     }
