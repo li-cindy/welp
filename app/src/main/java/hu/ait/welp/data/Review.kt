@@ -6,6 +6,7 @@ data class Review(
     var name: String = "",
     var description: String = "",
     var imgUrl: String = "",
-    var location: String = "", // TODO: should be LatLng
+    var lat: Double = 0.0,
+    var lng: Double = 0.0,
     var rating: Float = 0.toFloat()
 )

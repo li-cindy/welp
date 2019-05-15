@@ -35,12 +35,12 @@ class ReviewsAdapter(
     override fun getItemCount() = reviewsList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (authorId, author, name, description, imgUrl, location, rating) =
+        val (authorId, author, name, description, imgUrl, lat, lng, rating) =
             reviewsList[holder.adapterPosition]
 
         holder.tvName.text = name
         holder.tvDescription.text = description
-        holder.tvLocation.text = location.toString()
+        holder.tvLocation.text = "${lat}, ${lng}"
         holder.rbRating.rating = rating
 
 

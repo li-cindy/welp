@@ -31,7 +31,11 @@ class DisplayReviewsActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_map -> {
+                var mapsIntent = Intent()
+                mapsIntent.setClass(this@DisplayReviewsActivity,
+                    MapsActivity::class.java)
 
+                startActivity(mapsIntent)
                 return@OnNavigationItemSelectedListener true
             }
         }

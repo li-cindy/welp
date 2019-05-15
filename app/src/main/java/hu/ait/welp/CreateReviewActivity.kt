@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.Location
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,19 +13,30 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.PointOfInterest
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.type.LatLng
+import com.livinglifetechway.quickpermissions.annotations.WithPermissions
 import hu.ait.welp.data.Review
 import kotlinx.android.synthetic.main.activity_create_review.*
 import java.io.ByteArrayOutputStream
 import java.net.URLEncoder
 import java.util.*
 
-class CreateReviewActivity : AppCompatActivity() {
+class CreateReviewActivity : AppCompatActivity(),
+    LocationProvider.OnNewLocationAvailable, OnMapReadyCallback, GoogleMap.OnPoiClickListener{
+
+    private lateinit var locationProvider: LocationProvider
+    private var lat: Double = 0.0
+    private var lng: Double = 0.0
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 101
@@ -32,6 +44,8 @@ class CreateReviewActivity : AppCompatActivity() {
     }
 
     var uploadBitmap: Bitmap? = null
+    private lateinit var mMap: GoogleMap
+    private lateinit var mapFragment: SupportMapFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +57,24 @@ class CreateReviewActivity : AppCompatActivity() {
         }
 
         requestNeededPermission()
+        startLocation()
+
+        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this);
+
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.setOnPoiClickListener(this)
+    }
+
+
+    override fun onPoiClick(poi: PointOfInterest) {
+        etName.setText(poi.name)
+        lat = poi.latLng.latitude
+        lng = poi.latLng.longitude
+        tvLocation.text = "Location: ${lat}, ${lng}"
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -119,7 +151,8 @@ class CreateReviewActivity : AppCompatActivity() {
             etName.text.toString(),
             etDescription.text.toString(),
             imageUrl,
-            etLocation.text.toString(),
+            lat,
+            lng,
             rbEditRating.rating
         )
 
@@ -142,6 +175,8 @@ class CreateReviewActivity : AppCompatActivity() {
                 "Error: ${it.message}", Toast.LENGTH_LONG
             ).show()
         }
+
+        onStop()
     }
 
 
@@ -168,6 +203,31 @@ class CreateReviewActivity : AppCompatActivity() {
                     }
                 })
             }
+    }
+
+    @WithPermissions(
+        permissions = [android.Manifest.permission.ACCESS_FINE_LOCATION]
+    )
+    fun startLocation() {
+        locationProvider = LocationProvider(this,
+            this)
+        locationProvider.startLocationMonitoring()
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+        locationProvider.stopLocationMonitoring()
+    }
+
+    override fun onNewLocation(location: Location) {
+        lat = location.latitude
+        lng = location.longitude
+        tvLocation.text = "Location: ${lat}, ${lng}"
+
+        var latLng = com.google.android.gms.maps.model.LatLng(location.latitude, location.longitude)
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(19f))
     }
 
 }
