@@ -17,32 +17,26 @@ import com.livinglifetechway.quickpermissions.annotations.WithPermissions
 import hu.ait.welp.data.Review
 import kotlin.math.roundToInt
 
-class MapsActivity : AppCompatActivity(),  OnMapReadyCallback, LocationProvider.OnNewLocationAvailable {
+class MapsActivity : AppCompatActivity(),  OnMapReadyCallback, LocationProvider.OnNewLocationAvailable, FirebaseHandler {
 
     private lateinit var mMap: GoogleMap
     private lateinit var locationProvider: LocationProvider
+    private lateinit var firebaseRepository : FirebaseRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        firebaseRepository = FirebaseRepository(this)
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         startLocation()
-        initReviews()
+        firebaseRepository.initReviews()
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -71,38 +65,23 @@ class MapsActivity : AppCompatActivity(),  OnMapReadyCallback, LocationProvider.
     }
 
 
+    override fun handleDocAdded(dc: DocumentChange) {
+        val review = dc.document.toObject(Review::class.java)
+        val markerOptions = MarkerOptions().position(LatLng(review.lat, review.lng)).
+            title(review.name).snippet("Rating: ${review.rating} out of 5.0")
+        mMap.addMarker(markerOptions)
+    }
 
-    private fun initReviews() {
-        val db = FirebaseFirestore.getInstance()
+    override fun handleDocModified(dc: DocumentChange) {
+        Toast.makeText(this@MapsActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG).show()
+    }
 
-        val query = db.collection("reviews")
+    override fun handleDocRemoved(dc: DocumentChange) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
-        var allReviewsListener = query.addSnapshotListener(
-            object: EventListener<QuerySnapshot> {
-                override fun onEvent(querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException?) {
-                    if (e != null) {
-                        Toast.makeText(this@MapsActivity, "listen error: ${e.message}", Toast.LENGTH_LONG).show()
-                        return
-                    }
-
-                    for (dc in querySnapshot!!.getDocumentChanges()) {
-                        when (dc.getType()) {
-                            DocumentChange.Type.ADDED -> {
-                                val review = dc.document.toObject(Review::class.java)
-                                val markerOptions = MarkerOptions().position(LatLng(review.lat, review.lng)).
-                                    title(review.name).snippet("Rating: ${review.rating} out of 5.0")
-                                mMap.addMarker(markerOptions)
-                            }
-                            DocumentChange.Type.MODIFIED -> {
-                                Toast.makeText(this@MapsActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG).show()
-                            }
-                            DocumentChange.Type.REMOVED -> {
-                                //TODO: handle this case
-                            }
-                        }
-                    }
-                }
-            })
+    override fun handleError(querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException?) {
+        Toast.makeText(this@MapsActivity, "listen error: ${e!!.message}", Toast.LENGTH_LONG).show()
     }
 
 
