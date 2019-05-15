@@ -12,9 +12,9 @@ import hu.ait.welp.adapter.ReviewsAdapter
 import hu.ait.welp.data.Review
 import kotlinx.android.synthetic.main.activity_display_reviews.*
 
-class DisplayReviewsActivity : AppCompatActivity() {
-
+class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
     lateinit var reviewsAdapter: ReviewsAdapter
+    lateinit var firebaseRepository: FirebaseRepository
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -31,7 +31,11 @@ class DisplayReviewsActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_map -> {
+                var mapsIntent = Intent()
+                mapsIntent.setClass(this@DisplayReviewsActivity,
+                    MapsActivity::class.java)
 
+                startActivity(mapsIntent)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -46,6 +50,7 @@ class DisplayReviewsActivity : AppCompatActivity() {
 
         reviewsAdapter = ReviewsAdapter(this,
             FirebaseAuth.getInstance().currentUser!!.uid)
+        firebaseRepository = FirebaseRepository(this)
 
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
@@ -54,39 +59,27 @@ class DisplayReviewsActivity : AppCompatActivity() {
 
         recyclerReviews.adapter = reviewsAdapter
 
-        initReviews()
+        firebaseRepository.initReviews()
     }
 
-    private fun initReviews() {
-        val db = FirebaseFirestore.getInstance()
 
-        val query = db.collection("reviews")
-
-        var allReviewsListener = query.addSnapshotListener(
-            object: EventListener<QuerySnapshot> {
-                override fun onEvent(querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException?) {
-                    if (e != null) {
-                        Toast.makeText(this@DisplayReviewsActivity, "listen error: ${e.message}", Toast.LENGTH_LONG).show()
-                        return
-                    }
-
-                    for (dc in querySnapshot!!.getDocumentChanges()) {
-                        when (dc.getType()) {
-                            DocumentChange.Type.ADDED -> {
-                                val review = dc.document.toObject(Review::class.java)
-                                reviewsAdapter.addReview(review, dc.document.id)
-                            }
-                            DocumentChange.Type.MODIFIED -> {
-                                Toast.makeText(this@DisplayReviewsActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG).show()
-                            }
-                            DocumentChange.Type.REMOVED -> {
-                                reviewsAdapter.removeReviewByKey(dc.document.id)
-                            }
-                        }
-                    }
-                }
-            })
+    override fun handleDocAdded(dc: DocumentChange) {
+        val review = dc.document.toObject(Review::class.java)
+        reviewsAdapter.addReview(review, dc.document.id)
     }
+
+    override fun handleDocModified(dc: DocumentChange) {
+        Toast.makeText(this@DisplayReviewsActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG).show()
+    }
+
+    override fun handleDocRemoved(dc: DocumentChange) {
+        reviewsAdapter.removeReviewByKey(dc.document.id)
+    }
+
+    override fun handleError(querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException?) {
+        Toast.makeText(this@DisplayReviewsActivity, "listen error: ${e!!.message}", Toast.LENGTH_LONG).show()
+    }
+
 
 
 }
