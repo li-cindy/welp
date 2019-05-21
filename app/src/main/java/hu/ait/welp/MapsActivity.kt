@@ -22,6 +22,8 @@ class MapsActivity : AppCompatActivity(),  OnMapReadyCallback, LocationProvider.
     private lateinit var mMap: GoogleMap
     private lateinit var locationProvider: LocationProvider
     private lateinit var firebaseRepository : FirebaseRepository
+    private var lat: Double = 0.0
+    private var lng: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +61,13 @@ class MapsActivity : AppCompatActivity(),  OnMapReadyCallback, LocationProvider.
     }
 
     override fun onNewLocation(location: Location) {
-        var latLng = LatLng(location.latitude, location.longitude)
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(14f))
+        if (lat == 0.0 && lng == 0.0){
+            lat = location.latitude
+            lng = location.longitude
+            var latLng = LatLng(lat, lng)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(14f))
+        }
     }
 
 
