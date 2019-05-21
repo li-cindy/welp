@@ -1,5 +1,7 @@
 package hu.ait.welp.data
 
+import java.io.Serializable
+
 data class Review(
     var uid: String = "",
     var author: String = "",
@@ -9,4 +11,4 @@ data class Review(
     var lat: Double = 0.0,
     var lng: Double = 0.0,
     var rating: Float = 0.toFloat()
-)
+) : Serializable

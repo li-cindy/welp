@@ -21,7 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".CreateReviewActivity">
+
+        <activity android:name=".CreateReviewActivity"
+                  android:label="@string/title_create_review">
         </activity>
         <activity
                 android:name=".DisplayReviewsActivity"
