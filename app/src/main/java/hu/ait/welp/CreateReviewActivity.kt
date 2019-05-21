@@ -23,7 +23,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.type.LatLng
 import com.livinglifetechway.quickpermissions.annotations.WithPermissions
 import hu.ait.welp.data.Review
 import kotlinx.android.synthetic.main.activity_create_review.*
@@ -41,6 +40,7 @@ class CreateReviewActivity : AppCompatActivity(),
     companion object {
         private const val PERMISSION_REQUEST_CODE = 101
         private const val CAMERA_REQUEST_CODE = 102
+        const val KEY_ITEM_TO_EDIT = "KEY_ITEM_TO_EDIT"
     }
 
     var uploadBitmap: Bitmap? = null
@@ -61,6 +61,7 @@ class CreateReviewActivity : AppCompatActivity(),
         mapFragment = supportFragmentManager.findFragmentById(R.id.createReviewMap) as SupportMapFragment
         mapFragment.getMapAsync(this);
         startLocation()
+
 
     }
 
@@ -231,5 +232,5 @@ class CreateReviewActivity : AppCompatActivity(),
         }
     }
 
-
+    
 }

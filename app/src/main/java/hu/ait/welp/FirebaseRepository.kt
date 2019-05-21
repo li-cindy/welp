@@ -9,10 +9,10 @@ import hu.ait.welp.data.Review
 
 class FirebaseRepository(private val context: FirebaseHandler){
 
-    fun initReviews() {
+    fun initReviews(author: String) {
         val db = FirebaseFirestore.getInstance()
 
-        val query = db.collection("reviews")
+        val query = db.collection("reviews").whereEqualTo("author", author)
 
         var allReviewsListener = query.addSnapshotListener(
             object: EventListener<QuerySnapshot> {

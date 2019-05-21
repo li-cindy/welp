@@ -1,6 +1,7 @@
 package hu.ait.welp.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import hu.ait.welp.CreateReviewActivity
 import hu.ait.welp.DisplayReviewsActivity
 import hu.ait.welp.R
 import hu.ait.welp.data.Review
@@ -63,8 +65,24 @@ class ReviewsAdapter(
                 alert.show()
 
             }
+
+            // TODO: edit review
+            holder.ivEdit.visibility = View.VISIBLE
+            holder.ivEdit.setOnClickListener {
+
+                var editReviewIntent = Intent()
+                editReviewIntent.setClass(context,
+                    CreateReviewActivity::class.java)
+                editReviewIntent.putExtra("KEY_ITEM_TO_EDIT", reviewsList[holder.adapterPosition])
+
+                (context as DisplayReviewsActivity).startActivityForResult(editReviewIntent, 1001)
+
+//                val editreview = Review("","","restaurant","desc","", 25.0, 23.0,4.0.toFloat())
+                //editReview(holder.adapterPosition, reviewToEdit)
+            }
         } else {
             holder.ivDelete.visibility = View.GONE
+            holder.ivEdit.visibility = View.GONE
         }
 
         if (imgUrl.isNotEmpty()) {
@@ -75,6 +93,14 @@ class ReviewsAdapter(
         }
 
         setAnimation(holder.itemView, position)
+    }
+
+    private fun editReview(index: Int, review: Review) {
+        var docRef = FirebaseFirestore.getInstance().collection("reviews").document(
+            reviewKeys[index]
+        )
+
+        docRef.set(review)
     }
 
     fun addReview(review: Review, key: String) {
