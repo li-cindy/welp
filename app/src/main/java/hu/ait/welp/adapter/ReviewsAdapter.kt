@@ -44,7 +44,6 @@ class ReviewsAdapter(
         holder.rbRating.rating = rating
 
 
-//        TODO: delete review
         if (uId == authorId) {
             holder.ivDelete.visibility = View.VISIBLE
 
@@ -120,7 +119,6 @@ class ReviewsAdapter(
         val tvDescription: TextView = itemView.tvDescription
         val rbRating: RatingBar = itemView.rbRating
         val ivPhoto: ImageView = itemView.ivPhoto
-        val ivEdit: ImageView = itemView.ivEdit
         val ivDelete: ImageView = itemView.ivDelete
 
     }

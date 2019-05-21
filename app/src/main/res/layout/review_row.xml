@@ -57,13 +57,6 @@
                 android:layout_below="@id/tvDescription"/>
 
         <ImageView
-                android:id="@+id/ivEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_edit"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"/>
-        <ImageView
                 android:id="@+id/ivDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
