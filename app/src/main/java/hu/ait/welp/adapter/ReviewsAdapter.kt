@@ -66,23 +66,8 @@ class ReviewsAdapter(
 
             }
 
-            // TODO: edit review
-            holder.ivEdit.visibility = View.VISIBLE
-            holder.ivEdit.setOnClickListener {
-
-                var editReviewIntent = Intent()
-                editReviewIntent.setClass(context,
-                    CreateReviewActivity::class.java)
-                editReviewIntent.putExtra("KEY_ITEM_TO_EDIT", reviewsList[holder.adapterPosition])
-
-                (context as DisplayReviewsActivity).startActivityForResult(editReviewIntent, 1001)
-
-//                val editreview = Review("","","restaurant","desc","", 25.0, 23.0,4.0.toFloat())
-                //editReview(holder.adapterPosition, reviewToEdit)
-            }
         } else {
             holder.ivDelete.visibility = View.GONE
-            holder.ivEdit.visibility = View.GONE
         }
 
         if (imgUrl.isNotEmpty()) {
