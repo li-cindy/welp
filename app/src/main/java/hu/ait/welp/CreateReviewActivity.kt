@@ -57,10 +57,10 @@ class CreateReviewActivity : AppCompatActivity(),
         }
 
         requestNeededPermission()
-        startLocation()
 
         mapFragment = supportFragmentManager.findFragmentById(R.id.createReviewMap) as SupportMapFragment
         mapFragment.getMapAsync(this);
+        startLocation()
 
     }
 
@@ -221,13 +221,15 @@ class CreateReviewActivity : AppCompatActivity(),
     }
 
     override fun onNewLocation(location: Location) {
-        lat = location.latitude
-        lng = location.longitude
-        tvLocation.text = "Location: ${lat}, ${lng}"
-
-        var latLng = com.google.android.gms.maps.model.LatLng(location.latitude, location.longitude)
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(19f))
+        if (lat == 0.0 && lng == 0.0){
+            var latLng = com.google.android.gms.maps.model.LatLng(location.latitude, location.longitude)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(19f))
+            lat = location.latitude
+            lng = location.longitude
+            tvLocation.text = "Location: ${lat}, ${lng}"
+        }
     }
+
 
 }
