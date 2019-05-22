@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -22,7 +23,7 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
                 var displayReviewsIntent = Intent()
                 displayReviewsIntent.setClass(this@DisplayReviewsActivity,
                     DisplayReviewsActivity::class.java)
-                displayReviewsIntent.putExtra("KEY_USERNAME", FirebaseAuth.getInstance().currentUser!!.displayName!!)
+                displayReviewsIntent.removeExtra("KEY_USERNAME")
 
                 startActivity(displayReviewsIntent)
                 return@OnNavigationItemSelectedListener true
@@ -59,6 +60,11 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_reviews)
 
+        val displayTabs = intent.getBooleanExtra(getString(hu.ait.welp.R.string.FOLLOWING_KEY), false)
+        if(displayTabs){
+            navigation.visibility = View.INVISIBLE
+        }
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         reviewsAdapter = ReviewsAdapter(this,
@@ -74,9 +80,11 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
 
         if (intent.getStringExtra("KEY_USERNAME") != null){
             firebaseRepository.initReviews(intent.getStringExtra("KEY_USERNAME"))
+            tvReviewName.text = String.format("%s's Reviews", intent.getStringExtra("KEY_USERNAME"))
         }
         else{
             firebaseRepository.initReviews(FirebaseAuth.getInstance().currentUser!!.displayName!!)
+            tvReviewName.setText("Your Reviews")
         }
     }
 

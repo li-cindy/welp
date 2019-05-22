@@ -3,6 +3,7 @@ package hu.ait.welp.adapter
 import android.content.Context
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
@@ -51,6 +52,7 @@ class FollowingAdapter(
         holder.tvUsername.setOnClickListener {
             val intentDetails = Intent(context, DisplayReviewsActivity::class.java)
             intentDetails.putExtra("KEY_USERNAME", followUsername)
+            intentDetails.putExtra(Resources.getSystem().getString(hu.ait.welp.R.string.FOLLOWING_KEY), true)
             context.startActivity(intentDetails)
         }
 

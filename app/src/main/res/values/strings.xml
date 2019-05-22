@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Welp</string>
-    <string name="title_activity_display_reviews">Your Reviews</string>
+    <string name="title_activity_display_reviews">View Reviews</string>
     <string name="title_home">Home</string>
     <string name="title_create_review">Create Review</string>
     <string name="title_my_map">My Map</string>
@@ -101,4 +101,5 @@
     <string name="username">Username</string>
     <string name="following">Following</string>
     <string name="unfollow">Unfollow</string>
+    <string name="FOLLOWING_KEY">FOLLOWING_KEY</string>
 </resources>

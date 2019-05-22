@@ -35,7 +35,7 @@ class FollowingDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())
 
-        builder.setTitle("New item")
+        builder.setTitle("User to follow")
 
         val rootView = requireActivity().layoutInflater.inflate(
             R.layout.new_following_dialog, null

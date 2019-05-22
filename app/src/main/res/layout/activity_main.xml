@@ -29,7 +29,7 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:inputType="textEmailAddress"
-                      android:text="li.cindy98@gmail.com"
+                      android:text="mikeyevander@gmail.com"
                       android:hint="email" />
         </android.support.design.widget.TextInputLayout>
 

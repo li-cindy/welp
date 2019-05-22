@@ -50,7 +50,9 @@ class LoginActivity : AppCompatActivity() {
         ).addOnSuccessListener {
             Toast.makeText(this@LoginActivity,
                 "Login successful!", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this@LoginActivity, DisplayReviewsActivity::class.java))
+            val displayReviewsIntent =Intent(this@LoginActivity, DisplayReviewsActivity::class.java)
+            displayReviewsIntent.putExtra("FOLLOWING_KEY", false)
+            startActivity(displayReviewsIntent)
         }.addOnFailureListener {
             Toast.makeText(this@LoginActivity,
                 "Login failed! ${it.message}", Toast.LENGTH_LONG).show()
