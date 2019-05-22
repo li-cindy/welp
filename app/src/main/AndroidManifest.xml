@@ -19,7 +19,8 @@
                 android:label="@string/title_activity_following"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+        android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -34,7 +35,8 @@
                 android:name=".DisplayReviewsActivity"
                 android:label="@string/title_activity_display_reviews">
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+        android:noHistory="true">
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
