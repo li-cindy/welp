@@ -38,6 +38,14 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
                 startActivity(mapsIntent)
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.navigation_following -> {
+                var followingIntent = Intent()
+                followingIntent.setClass(this@DisplayReviewsActivity,
+                    FollowingActivity::class.java)
+
+                startActivity(followingIntent)
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
@@ -59,7 +67,12 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
 
         recyclerReviews.adapter = reviewsAdapter
 
-        firebaseRepository.initReviews()
+        if (intent.getStringExtra("KEY_USERNAME") != null){
+            firebaseRepository.initReviews(intent.getStringExtra("KEY_USERNAME"))
+        }
+        else{
+            firebaseRepository.initReviews(FirebaseAuth.getInstance().currentUser!!.displayName!!)
+        }
     }
 
 
