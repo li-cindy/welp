@@ -19,7 +19,12 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
+                var displayReviewsIntent = Intent()
+                displayReviewsIntent.setClass(this@DisplayReviewsActivity,
+                    DisplayReviewsActivity::class.java)
+                displayReviewsIntent.putExtra("KEY_USERNAME", FirebaseAuth.getInstance().currentUser!!.displayName!!)
 
+                startActivity(displayReviewsIntent)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_create_review -> {
