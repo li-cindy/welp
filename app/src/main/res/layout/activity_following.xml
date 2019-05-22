@@ -49,6 +49,7 @@
             android:layout_margin="16dp"
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom|end"
-            app:srcCompat="@android:drawable/ic_input_add"/>
+            android:backgroundTint="@color/cardview_light_background"
+            app:srcCompat="@android:drawable/ic_menu_add"/>
 
 </android.support.design.widget.CoordinatorLayout>
