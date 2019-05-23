@@ -18,4 +18,10 @@
             android:title="@string/title_my_map"
             android:iconTint="@android:color/black"/>
 
+    <item
+            android:id="@+id/navigation_following"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="@string/following"
+            android:iconTint="@android:color/black"/>
+
 </menu>

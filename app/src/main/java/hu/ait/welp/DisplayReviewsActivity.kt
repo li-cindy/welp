@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -19,7 +20,12 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
+                var displayReviewsIntent = Intent()
+                displayReviewsIntent.setClass(this@DisplayReviewsActivity,
+                    DisplayReviewsActivity::class.java)
+                displayReviewsIntent.removeExtra("KEY_USERNAME")
 
+                startActivity(displayReviewsIntent)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_create_review -> {
@@ -38,6 +44,14 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
                 startActivity(mapsIntent)
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.navigation_following -> {
+                var followingIntent = Intent()
+                followingIntent.setClass(this@DisplayReviewsActivity,
+                    FollowingActivity::class.java)
+
+                startActivity(followingIntent)
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
@@ -45,6 +59,11 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_reviews)
+
+        val displayTabs = intent.getBooleanExtra(getString(hu.ait.welp.R.string.FOLLOWING_KEY), false)
+        if(displayTabs){
+            navigation.visibility = View.INVISIBLE
+        }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
@@ -59,7 +78,14 @@ class DisplayReviewsActivity : AppCompatActivity(), FirebaseHandler {
 
         recyclerReviews.adapter = reviewsAdapter
 
-        firebaseRepository.initReviews()
+        if (intent.getStringExtra("KEY_USERNAME") != null){
+            firebaseRepository.initReviews(intent.getStringExtra("KEY_USERNAME"))
+            tvReviewName.text = String.format("%s's Reviews", intent.getStringExtra("KEY_USERNAME"))
+        }
+        else{
+            firebaseRepository.initReviews(FirebaseAuth.getInstance().currentUser!!.displayName!!)
+            tvReviewName.setText("Your Reviews")
+        }
     }
 
 

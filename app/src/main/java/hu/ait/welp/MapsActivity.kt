@@ -11,6 +11,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.livinglifetechway.k4kotlin.TAG
 import com.livinglifetechway.quickpermissions.annotations.WithPermissions
@@ -35,7 +36,7 @@ class MapsActivity : AppCompatActivity(),  OnMapReadyCallback, LocationProvider.
         mapFragment.getMapAsync(this)
 
         startLocation()
-        firebaseRepository.initReviews()
+        firebaseRepository.initReviews(FirebaseAuth.getInstance().currentUser!!.displayName!!)
     }
 
 
